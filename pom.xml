@@ -62,12 +62,32 @@
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.jenetics</groupId>
+      <artifactId>jpx</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-reactive-pg-client</artifactId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-spring-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-spatial</artifactId>
+      <version>5.4.12.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>net.postgis</groupId>
+      <artifactId>postgis-jdbc</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.vividsolutions</groupId>
+      <artifactId>jts</artifactId>
+      <version>1.13</version>
     </dependency>
   </dependencies>
   <build>
@@ -123,11 +143,17 @@
             <artifactId>kotlin-maven-allopen</artifactId>
             <version>${kotlin.version}</version>
           </dependency>
+          <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-noarg</artifactId>
+            <version>${kotlin.version}</version>
+          </dependency>
         </dependencies>
         <configuration>
           <javaParameters>true</javaParameters>
           <compilerPlugins>
             <plugin>all-open</plugin>
+            <plugin>jpa</plugin>
           </compilerPlugins>
           <pluginOptions>
             <option>all-open:annotation=javax.ws.rs.Path</option>
@@ -169,6 +195,7 @@
       </build>
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
       </properties>
     </profile>
   </profiles>
