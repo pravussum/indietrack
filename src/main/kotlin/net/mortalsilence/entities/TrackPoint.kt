@@ -1,4 +1,4 @@
-package org.mortalsilence.entities
+package net.mortalsilence.entities
 
 import com.vividsolutions.jts.geom.Point
 import javax.persistence.Entity

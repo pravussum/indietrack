@@ -1,10 +1,9 @@
-package org.mortalsilence
+package net.mortalsilence
 
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
-import org.mortalsilence.entities.TrackPoint
+import net.mortalsilence.entities.TrackPoint
 import java.util.*
-import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.transaction.Transactional
@@ -31,9 +30,20 @@ class ExampleResource(@Inject val em: EntityManager,
 
     @GET
     @Path("/{id}")
-    fun getTrackPoint(@PathParam("id") id: Long) : Optional<TrackPoint> {
+    fun getTrackPoint(@PathParam("id") id: Long) : Optional<LatLong> {
         return trackPointRepository.findById(id)
+                .map(this::mapTrackpoint2LatLong)
     }
+
+    @GET
+    @Path("/")
+    fun getTrackPoints(): List<LatLong> {
+        return trackPointRepository
+                .findAll()
+                .map(this::mapTrackpoint2LatLong)
+    }
+
+    private fun mapTrackpoint2LatLong(it: TrackPoint) = LatLong(it.location.x,it.location.y)
 
     @GET
     @Path("/distance")
@@ -45,3 +55,5 @@ class ExampleResource(@Inject val em: EntityManager,
         return first.location.distance(second.location)
     }
 }
+
+data class LatLong(val lat:Double?, val long:Double?)

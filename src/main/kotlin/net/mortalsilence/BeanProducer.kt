@@ -1,4 +1,4 @@
-package org.mortalsilence
+package net.mortalsilence
 
 import com.vividsolutions.jts.geom.GeometryFactory
 import javax.enterprise.context.ApplicationScoped

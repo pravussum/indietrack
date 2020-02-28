@@ -1,4 +1,4 @@
-package org.mortalsilence
+package net.mortalsilence
 
 import io.quarkus.test.junit.NativeImageTest
 
