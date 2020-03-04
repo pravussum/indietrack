@@ -1,0 +1,11 @@
+.trackoverview-container {
+  display:flex;
+}
+
+.tracklist-container {
+  width: 30%;
+}
+
+.trackview-container {
+  width: 70%;
+}

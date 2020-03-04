@@ -1,0 +1,20 @@
+POST localhost:8099/track/gpx
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="fileName"
+
+GPX-Route
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="route.gpx"
+
+< /home/pravussum/Downloads/BG_Runde_Richtung_Freital.gpx
+--WebAppBoundary--
+
+###
+
+GET localhost:8099/track/1
+###
+
+GET localhost:8099/track/intersection
+###

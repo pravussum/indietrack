@@ -1,6 +1,6 @@
-package net.mortalsilence
+package net.mortalsilence.indierace
 
-import com.vividsolutions.jts.geom.GeometryFactory
+import org.locationtech.jts.geom.GeometryFactory
 import javax.enterprise.context.ApplicationScoped
 import javax.enterprise.inject.Produces
 

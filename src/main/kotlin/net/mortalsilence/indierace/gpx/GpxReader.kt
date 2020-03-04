@@ -1,31 +1,26 @@
-package net.mortalsilence.indieraceserver
+package net.mortalsilence.indierace.gpx
 
-import com.vividsolutions.jts.geom.*
 import io.jenetics.jpx.GPX
 import io.jenetics.jpx.Track
 import io.jenetics.jpx.TrackSegment
 import io.jenetics.jpx.WayPoint
-import net.mortalsilence.indieraceserver.entities.TrackPoint
-import net.mortalsilence.indieraceserver.repository.TrackPointRepository
-import net.mortalsilence.indieraceserver.repository.TrackRepository
-import net.mortalsilence.indieraceserver.repository.TrackSegmentRepository
-import org.springframework.stereotype.Service
-import javax.inject.Inject
+import java.io.InputStream
+import javax.enterprise.context.ApplicationScoped
 import kotlin.streams.toList
 
-@Service
-class GpxReader (@Inject val geometryFactory: GeometryFactory){
+@ApplicationScoped
+class GpxReader {
 
-    fun readGpx(path: String) : List<LatLngTime>{
-        val points = List<Point>()
-        GPX.read( path)
+    fun <T> readGpx(inputStream: InputStream, mapFunc: (WayPoint) -> T) : List<T>{
+        return GPX.reader(GPX.Version.V10, GPX.Reader.Mode.LENIENT)
+                .read(inputStream)
                 .tracks()
                 .flatMap(Track::segments)
                 .flatMap(TrackSegment::points)
-                .map{ geometryFactory.createPoint(Coordinate(it.latitude.toDouble(), it.longitude.toDouble(), it.elevation.get().toDouble()))}
+                .map{ mapFunc(it) }
                 .toList()
-        return geometryFactory.createMultiPoint();
     }
+
 /*
 
     fun saveTrack(paths: List<String>) {
