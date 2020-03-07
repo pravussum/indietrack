@@ -28,10 +28,16 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/{id}")
-    fun getTrackPoint(@PathParam("id") id: Long) : List<LatLngTimeEle> {
+    fun getTrackPoints(@PathParam("id") id: Long) : List<LatLngTimeEle> {
         return trackPointRepository
                 .findByTrackId(id)
                 .map(trackPointMapper::mapTrackpoint2LatLong)
+    }
+
+    @GET
+    @Path("/{id}/geojson")
+    fun getTrackPointsAsGeoJson(@PathParam("id") trackId: Long) : String {
+        return trackPointRepository.getTrackPointsAsGeoJson(trackId)
     }
 
     @POST

@@ -11,7 +11,7 @@ export class TracklistComponent implements OnInit {
 
   constructor(private http:HttpClient) { }
   tracks: number[];
-  selectedTrackId = 5900;
+  selectedTrackId;
 
   ngOnInit() {
     this.http.get<number[]>("http://localhost:8099/track").subscribe(

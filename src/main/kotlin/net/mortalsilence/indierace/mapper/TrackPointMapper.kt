@@ -16,6 +16,7 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
         val longitude = wayPoint.longitude.toDouble()
         val latitude = wayPoint.latitude.toDouble()
         val elevation = wayPoint.elevation.get().toDouble()
+        // TODO handle empty value
         val time = wayPoint.time.get()
         return mapLatLongEleTimeToTrackPoint(longitude, latitude, elevation, time)
     }

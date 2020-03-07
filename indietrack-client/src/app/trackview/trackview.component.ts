@@ -1,8 +1,13 @@
+/// <reference path="leaflet.hg.d.ts"/>
+
 import * as L from 'leaflet';
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
+import * as d3 from 'd3';
+import 'leaflet.heightgraph';
+
 
 @Component({
   selector: 'app-trackview',
@@ -12,6 +17,7 @@ import {Observable} from "rxjs";
 export class TrackviewComponent implements OnInit {
   private mymap: L.Map;
   private trackId_;
+  private heightGraph;
   private routeUpdated: Observable<any>
   constructor(private http:HttpClient,
               private route: ActivatedRoute,
@@ -24,6 +30,7 @@ export class TrackviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    d3.select('body');
     this.route.paramMap.subscribe(params => {
       if(params.get('trackId')) {
         this.trackId_ = params.get('trackId');
@@ -33,13 +40,25 @@ export class TrackviewComponent implements OnInit {
   }
 
   private getAndDrawTrack() {
-    this.http.get<LatLong[]>("http://localhost:8099/track/" + this.trackId_).subscribe(data => {
-      console.log(data);
-      if(this.mymap == undefined) {
-        this.initMap(data[0].latitude, data[0].longitude);
-      }
-      this.drawTrack(data, 'blue');
-    })
+    if(this.trackId_ == undefined) {
+      return;
+    }
+    // this.http.get<LatLong[]>("http://localhost:8099/track/" + this.trackId_).subscribe(data => {
+    //   console.log(data);
+    //   if(this.mymap == undefined) {
+    //     this.initMap(data[0].latitude, data[0].longitude);
+    //   }
+    //   this.drawTrack(data, 'blue');
+    // });
+    this.http.get<any>("http://localhost:8099/track/" + this.trackId_ + "/geojson").subscribe(data => {
+        if(this.mymap == undefined) {
+          this.initMap(50.9263521, 14.2375971);
+        }
+      this.heightGraph = L.control.heightgraph();
+      this.heightGraph.addTo(this.mymap);
+      this.heightGraph.addData(data);
+      L.geoJSON(data).addTo(this.mymap);
+      });
   }
 
   private initMap(latitude, longitude) {
@@ -55,6 +74,7 @@ export class TrackviewComponent implements OnInit {
     console.log("drawing " + data.length)
     const latLng = (data).map(this.mapToLatLng);
     const polyline = L.polyline(latLng, {color: color}).addTo(this.mymap);
+    this.mymap.setView([data[0].latitude, data[0].longitude], 12)
     polyline.bringToBack()
   }
 
