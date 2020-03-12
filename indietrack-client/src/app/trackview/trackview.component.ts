@@ -1,4 +1,5 @@
 /// <reference path="leaflet.hg.d.ts"/>
+/// <reference path="../../../node_modules/@types/d3/index.d.ts" />
 
 import * as L from 'leaflet';
 import {Component, Input, OnInit} from '@angular/core';
@@ -54,9 +55,9 @@ export class TrackviewComponent implements OnInit {
         if(this.mymap == undefined) {
           this.initMap(50.9263521, 14.2375971);
         }
-      this.heightGraph = L.control.heightgraph();
-      this.heightGraph.addTo(this.mymap);
-      this.heightGraph.addData(data);
+      // this.heightGraph = L.control.heightgraph();
+      // this.heightGraph.addTo(this.mymap);
+      // this.heightGraph.addData(data);
       L.geoJSON(data).addTo(this.mymap);
       });
   }

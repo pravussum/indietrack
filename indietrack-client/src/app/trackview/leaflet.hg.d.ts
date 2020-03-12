@@ -1,5 +1,5 @@
 import * as Leaflet from 'leaflet'
-import 'd3'
+import * as D3 from 'd3'
 
 declare module 'leaflet' {
   namespace control {
