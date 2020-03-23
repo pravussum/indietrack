@@ -10,18 +10,18 @@ import {assertNumber} from "@angular/core/src/render3/assert";
 export class TracklistComponent implements OnInit {
 
   constructor(private http:HttpClient) { }
-  tracks: number[];
+  tracks: Track[];
   selectedTrackId = 5900;
 
   ngOnInit() {
-    this.http.get<number[]>("http://localhost:8099/track").subscribe(
-      trackIds => {
-        this.tracks = trackIds;
+    this.http.get<Track[]>("http://localhost:8099/track").subscribe(
+      trackInfo => {
+        this.tracks = trackInfo;
       });
   }
 
-  onSelect(track: number) {
+  onSelect(track: Track) {
     console.log(track);
-    this.selectedTrackId = track;
+    this.selectedTrackId = track.id;
   }
 }

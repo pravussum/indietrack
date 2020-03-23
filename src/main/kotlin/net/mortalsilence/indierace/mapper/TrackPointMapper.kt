@@ -5,6 +5,7 @@ import org.locationtech.jts.geom.GeometryFactory
 import io.jenetics.jpx.WayPoint
 import net.mortalsilence.indierace.dao.TrackPoint
 import net.mortalsilence.indierace.dto.LatLngTimeEle
+import java.io.InvalidObjectException
 import java.time.ZonedDateTime
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
@@ -15,8 +16,8 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
     fun mapWayPoint2TrackPoint(wayPoint: WayPoint) : TrackPoint {
         val longitude = wayPoint.longitude.toDouble()
         val latitude = wayPoint.latitude.toDouble()
-        val elevation = wayPoint.elevation.get().toDouble()
-        val time = wayPoint.time.get()
+        val elevation = wayPoint.elevation.map { it.toDouble() }.orElseThrow { InvalidObjectException("Invalid elevation in WayPoint.")}
+        val time = wayPoint.time.orElseThrow{InvalidObjectException("Invalid timestamp in WayPoint.")}
         return mapLatLongEleTimeToTrackPoint(longitude, latitude, elevation, time)
     }
 

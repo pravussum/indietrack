@@ -1,5 +1,6 @@
 package net.mortalsilence.indierace.dao
 
+import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
@@ -8,5 +9,7 @@ import javax.persistence.*
 )
 data class Track (
         @Id @GeneratedValue var id: Long? = null,
-        var name: String
+        var name: String,
+        var externalId: String? = null,
+        var startTime: ZonedDateTime? = null
 )

@@ -8,6 +8,7 @@ import java.io.InputStream
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
+import javax.transaction.Transactional
 
 @ApplicationScoped
 class GpxTrackPersistor(@Inject internal val trackPointRepository: TrackPointRepository,
@@ -15,11 +16,20 @@ class GpxTrackPersistor(@Inject internal val trackPointRepository: TrackPointRep
                         @Inject internal val gpxReader: GpxReader,
                         @Inject internal val trackPointMapper: TrackPointMapper) {
 
-    fun persistGpxTrack(inputStream: InputStream): Track {
+    @Transactional
+    fun persistGpxTrack(inputStream: InputStream,
+                        trackName: String? = null,
+                        externalId: String? = null): Track {
         val trackPoints = gpxReader.readGpx(inputStream, trackPointMapper::mapWayPoint2TrackPoint)
-        val track = Track(name = UUID.randomUUID().toString())
-        trackRepository.save(track)
-        trackPoints.forEach {it.track = track; trackPointRepository.save(it)}
+        val track = Track(name = trackName?:UUID.randomUUID().toString(), externalId = externalId)
+        trackPoints.peek{
+                    if(track.id == null) {
+                        track.startTime = it.time
+                        trackRepository.save(track)
+                    }
+                }
+                .forEach {it.track = track; trackPointRepository.save(it)}
+        // TODO handle empty trackpoints
         return track
     }
 

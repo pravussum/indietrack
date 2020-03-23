@@ -13,6 +13,7 @@ export class TrackviewComponent implements OnInit {
   private mymap: L.Map;
   private trackId_;
   private routeUpdated: Observable<any>
+  private currentTrackPolyline: L.Polyline;
   constructor(private http:HttpClient,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -37,13 +38,18 @@ export class TrackviewComponent implements OnInit {
       console.log(data);
       if(this.mymap == undefined) {
         this.initMap(data[0].latitude, data[0].longitude);
+      } else {
+        this.mymap.setView([data[0].latitude, data[0].longitude], 12)
       }
       this.drawTrack(data, 'blue');
     })
   }
 
   private initMap(latitude, longitude) {
-    this.mymap = L.map('mapid').setView([latitude, longitude], 12);
+    this.mymap = L.map('mapid');
+    if(latitude && longitude) {
+      this.mymap.setView([latitude, longitude], 12);
+    }
     const osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
     L.tileLayer(osmUrl, {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -52,10 +58,13 @@ export class TrackviewComponent implements OnInit {
   }
 
   private drawTrack(data, color) {
+    if(this.currentTrackPolyline){
+      this.currentTrackPolyline.removeFrom(this.mymap);
+    }
     console.log("drawing " + data.length)
     const latLng = (data).map(this.mapToLatLng);
-    const polyline = L.polyline(latLng, {color: color}).addTo(this.mymap);
-    polyline.bringToBack()
+    this.currentTrackPolyline = L.polyline(latLng, {color: color}).addTo(this.mymap);
+    this.currentTrackPolyline.bringToBack()
   }
 
 

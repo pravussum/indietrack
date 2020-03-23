@@ -1,5 +1,6 @@
 package net.mortalsilence.indierace.rest
 
+import net.mortalsilence.indierace.dao.Track
 import net.mortalsilence.indierace.dao.TrackPointRepository
 import net.mortalsilence.indierace.dao.TrackRepository
 import net.mortalsilence.indierace.dto.LatLngTimeEle
@@ -21,9 +22,8 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/")
-    fun getTracks(): List<Long> {
-        return trackRepository.findAll()
-                .map { it.id!! }
+    fun getTracks(): List<Track> {
+        return trackRepository.findAll().toList()
     }
 
     @GET

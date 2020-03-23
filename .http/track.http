@@ -13,6 +13,10 @@ Content-Disposition: form-data; name="file"; filename="route.gpx"
 
 ###
 
+GET http://localhost:8099/track
+
+###
+
 GET localhost:8099/track/1
 ###
 
