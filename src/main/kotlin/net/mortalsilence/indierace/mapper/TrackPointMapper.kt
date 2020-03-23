@@ -17,6 +17,7 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
         val longitude = wayPoint.longitude.toDouble()
         val latitude = wayPoint.latitude.toDouble()
         val elevation = wayPoint.elevation.map { it.toDouble() }.orElseThrow { InvalidObjectException("Invalid elevation in WayPoint.")}
+        // TODO handle empty value
         val time = wayPoint.time.orElseThrow{InvalidObjectException("Invalid timestamp in WayPoint.")}
         return mapLatLongEleTimeToTrackPoint(longitude, latitude, elevation, time)
     }

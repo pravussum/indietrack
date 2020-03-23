@@ -1,8 +1,14 @@
+/// <reference path="leaflet.hg.d.ts"/>
+/// <reference path="../../../node_modules/@types/d3/index.d.ts" />
+
 import * as L from 'leaflet';
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
+import * as d3 from 'd3';
+import 'leaflet.heightgraph';
+
 
 @Component({
   selector: 'app-trackview',
@@ -12,6 +18,7 @@ import {Observable} from "rxjs";
 export class TrackviewComponent implements OnInit {
   private mymap: L.Map;
   private trackId_;
+  private heightGraph;
   private routeUpdated: Observable<any>
   private currentTrackPolyline: L.Polyline;
   constructor(private http:HttpClient,
@@ -25,6 +32,7 @@ export class TrackviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    d3.select('body');
     this.route.paramMap.subscribe(params => {
       if(params.get('trackId')) {
         this.trackId_ = params.get('trackId');
