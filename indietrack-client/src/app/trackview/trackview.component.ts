@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import * as d3 from 'd3';
 import 'leaflet.heightgraph';
-
+import {TrackService} from "../track/track.service";
 
 @Component({
   selector: 'app-trackview',
@@ -21,7 +21,7 @@ export class TrackviewComponent implements OnInit {
   private heightGraph;
   private routeUpdated: Observable<any>
   private currentTrackPolyline: L.Polyline;
-  constructor(private http:HttpClient,
+  constructor(private trackService: TrackService,
               private route: ActivatedRoute,
               private router: Router) { }
 
@@ -42,7 +42,7 @@ export class TrackviewComponent implements OnInit {
   }
 
   private getAndDrawTrack() {
-    this.http.get<LatLong[]>("http://localhost:8099/track/" + this.trackId_).subscribe(data => {
+    this.trackService.getTrackPoints(this.trackId_).subscribe(data => {
       console.log(data);
       if(this.mymap == undefined) {
         this.initMap(data[0].latitude, data[0].longitude);
@@ -76,7 +76,7 @@ export class TrackviewComponent implements OnInit {
   }
 
 
-  private mapToLatLng(row : LatLong) : L.LatLng {
+  private mapToLatLng(row : TrackPoint) : L.LatLng {
     return L.latLng(row.latitude, row.longitude)
   }
 

@@ -1,11 +1,6 @@
-.trackoverview-container {
-  display:flex;
-}
-
 .tracklist-container {
-  width: 30%;
-}
-
-.trackview-container {
-  width: 70%;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

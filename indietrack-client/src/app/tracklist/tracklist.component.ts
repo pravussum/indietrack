@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {assertNumber} from "@angular/core/src/render3/assert";
+import {Component, OnInit} from '@angular/core';
+import {TrackService} from "../track/track.service";
 
 @Component({
   selector: 'app-tracklist',
@@ -9,12 +8,12 @@ import {assertNumber} from "@angular/core/src/render3/assert";
 })
 export class TracklistComponent implements OnInit {
 
-  constructor(private http:HttpClient) { }
+  constructor(private trackService: TrackService) { }
   tracks: Track[];
   selectedTrackId;
 
   ngOnInit() {
-    this.http.get<Track[]>("http://localhost:8099/track").subscribe(
+    this.trackService.getTracks().subscribe(
       trackInfo => {
         this.tracks = trackInfo;
       });

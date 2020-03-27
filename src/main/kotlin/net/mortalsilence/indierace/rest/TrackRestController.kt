@@ -22,8 +22,8 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/")
-    fun getTracks(): List<Track> {
-        return trackRepository.findAll().toList()
+    fun getTracks(): Any {
+        return trackPointRepository.getTrackInfo()
     }
 
     @GET

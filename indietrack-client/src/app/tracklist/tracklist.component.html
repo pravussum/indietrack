@@ -1,19 +1,24 @@
-<div class="trackoverview-container">
-  <div class="tracklist-container">
-    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" class="tracklist-accordion">
-      <ngb-panel *ngFor="let track of tracks" (click)="onSelect(track)">
-        <ng-template ngbPanelTitle let-opened="opened">
-          <div class="d-flex align-items-center justify-content-between" (click)="onSelect(track)">
-            <button ngbPanelToggle class="btn btn-link p-0"><h5 class="m-0">{{track.name}}</h5></button>
-          </div>
-        </ng-template>
-        <ng-template ngbPanelContent>
-        </ng-template>
+<div class="d-flex h-100">
+  <div class="tracklist-container flex-column">
+    <div class="accordion" id="tracklistAccordion">
+      <div class="card" *ngFor="let track of tracks" (click)="onSelect(track)">
+        <div class="card-header" id="heading-{{track.id}}">
+          <h2 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" [attr.data-target]="'#collapse-' + track.id">
+              {{track.name}}
+            </button>
+          </h2>
+        </div>
 
-      </ngb-panel>
-    </ngb-accordion>
+        <div id="collapse-{{track.id}}" class="collapse" data-parent="#tracklistAccordion">
+          <div class="card-body">
+            {{track.name}}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="trackview-container">
-    <app-trackview [trackId]="selectedTrackId"></app-trackview>
+  <div class="trackview-container d-flex flex-column flex-grow-1">
+    <app-trackview [trackId]="selectedTrackId" class="flex-grow-1 h-100"></app-trackview>
   </div>
 </div>
