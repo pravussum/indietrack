@@ -3,12 +3,10 @@
 
 import * as L from 'leaflet';
 import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs";
-import * as d3 from 'd3';
-import 'leaflet.heightgraph';
 import {TrackService} from "../track/track.service";
+import {Track} from "../dto/Track";
+import {LatLng, LatLngBounds} from "leaflet";
 
 @Component({
   selector: 'app-trackview',
@@ -17,46 +15,49 @@ import {TrackService} from "../track/track.service";
 })
 export class TrackviewComponent implements OnInit {
   private mymap: L.Map;
-  private trackId_;
-  private heightGraph;
-  private routeUpdated: Observable<any>
+  private _track: Track;
   private currentTrackPolyline: L.Polyline;
   constructor(private trackService: TrackService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+              private route: ActivatedRoute) { }
 
   @Input()
-  set trackId(trackId: number) {
-    this.trackId_ = trackId;
-    this.getAndDrawTrack();
+  set track(track: Track) {
+    this._track = track;
+    if(track) {
+      this.getAndDrawTrack();
+    }
+  }
+
+  get track(): Track {
+    return this._track;
   }
 
   ngOnInit() {
-    d3.select('body');
     this.route.paramMap.subscribe(params => {
       if(params.get('trackId')) {
-        this.trackId_ = params.get('trackId');
-        this.getAndDrawTrack();
+        this.trackService.getTrack(Number(params.get('trackId'))).subscribe(track => {this.track = track})
       }
     });
   }
 
   private getAndDrawTrack() {
-    this.trackService.getTrackPoints(this.trackId_).subscribe(data => {
+    let currentTrack = this._track;
+    this.trackService.getTrackPoints(currentTrack.id).subscribe(data => {
       console.log(data);
       if(this.mymap == undefined) {
-        this.initMap(data[0].latitude, data[0].longitude);
+        this.initMap(currentTrack.boundaries);
       } else {
-        this.mymap.setView([data[0].latitude, data[0].longitude], 12)
+        // this.mymap.setView([data[0].latitude, data[0].longitude], 12)
+        this.mymap.flyToBounds(currentTrack.boundaries)
       }
       this.drawTrack(data, 'blue');
     })
   }
 
-  private initMap(latitude, longitude) {
+  private initMap(boundaries: LatLngBounds) {
     this.mymap = L.map('mapid');
-    if(latitude && longitude) {
-      this.mymap.setView([latitude, longitude], 12);
+    if(boundaries) {
+      this.mymap.fitBounds(boundaries);
     }
     const osmUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
     L.tileLayer(osmUrl, {
@@ -69,12 +70,10 @@ export class TrackviewComponent implements OnInit {
     if(this.currentTrackPolyline){
       this.currentTrackPolyline.removeFrom(this.mymap);
     }
-    console.log("drawing " + data.length)
     const latLng = (data).map(this.mapToLatLng);
     this.currentTrackPolyline = L.polyline(latLng, {color: color}).addTo(this.mymap);
     this.currentTrackPolyline.bringToBack()
   }
-
 
   private mapToLatLng(row : TrackPoint) : L.LatLng {
     return L.latLng(row.latitude, row.longitude)

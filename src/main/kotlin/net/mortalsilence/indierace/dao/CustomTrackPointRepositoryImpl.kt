@@ -1,10 +1,11 @@
 package net.mortalsilence.indierace.dao
 
+import net.mortalsilence.indierace.dto.DtoTrackInfo
 import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import javax.persistence.SqlResultSetMapping
 
+@Suppress("", "unused")
 class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal val entityManager: EntityManager): CustomTrackPointRepository {
     override fun getIntersectionAsGeoJson(segmentTrackId: Long, trackId: Long) : String {
 
@@ -40,23 +41,25 @@ class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal val en
                 .toString()
     }
 
-    override fun getTrackInfo(): Any {
+    override fun getTrackInfo(trackId: Long?): List<DtoTrackInfo> {
+        val trackIdCondition = if(trackId != null) "where track.id = $trackId" else ""
         val sql = """
-            with tracks as (
-                select track_id, cast(st_makeline(location order by time) as geography) as track
-                from trackpoint
-                group by track_id
-            )
             select
-                   track_id,
-                   st_length(track),
-                   st_asgeojson(cast(st_envelope(cast(track as geometry)) as geography)),
-                   (select min(time) from trackpoint _tp where _tp.track_id = tracks.track_id) as start_time,
-                   (select max(time) from trackpoint _tp where _tp.track_id = tracks.track_id) as end_time
-            from tracks
+                track_id as id,
+                min(name) as trackName,
+                st_length(cast(st_makeline(location order by time) as geography)) as distance,
+                st_extent(location) as boundaries,
+                min(time) as startTime,
+                max(time) as endTime
+            from trackpoint join track on track_id = track.id
+            group by track_id
+            $trackIdCondition
+            order by min(time) desc
             """
-        return entityManager.createNativeQuery(sql)
-                .resultList;
+
+        @Suppress("UNCHECKED_CAST")
+        return entityManager.createNativeQuery(sql, "TrackInfoMapping")
+                .resultList as List<DtoTrackInfo>
     }
 
 }

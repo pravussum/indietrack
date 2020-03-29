@@ -36,7 +36,7 @@ open class WebDavSync (
             try {
                 val gpxStream = sardine.get(url)
                 gpxTrackPersistor.persistGpxTrack(gpxStream, getFilenameOnly(davResource.path), davResource.etag)
-            } catch (e: InvalidObjectException) {
+            } catch (e: Exception) {
                 LOGGER.info("Skipping invalid file ${davResource.path}: ${e.message}")
             } finally {
                 sardine.shutdown()

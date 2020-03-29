@@ -1,13 +1,15 @@
 package net.mortalsilence.indierace.rest
 
-import net.mortalsilence.indierace.dao.Track
 import net.mortalsilence.indierace.dao.TrackPointRepository
 import net.mortalsilence.indierace.dao.TrackRepository
+import net.mortalsilence.indierace.dto.DtoTrackInfo
 import net.mortalsilence.indierace.dto.LatLngTimeEle
 import net.mortalsilence.indierace.dto.MultipartBody
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
 import net.mortalsilence.indierace.mapper.TrackPointMapper
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm
+import org.postgis.PGbox2d
+import java.util.*
 import javax.inject.Inject
 import javax.transaction.Transactional
 import javax.ws.rs.*
@@ -22,12 +24,31 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/")
-    fun getTracks(): Any {
-        return trackPointRepository.getTrackInfo()
+    fun getTracks(): List<TrackInfoResult> {
+        return trackPointRepository
+                .getTrackInfo()
+                .map(mapToLatLngBounds())
     }
 
     @GET
     @Path("/{id}")
+    fun getTrack(@PathParam("id") id: Long): List<TrackInfoResult> {
+        return trackPointRepository
+                .getTrackInfo(id)
+                .map(mapToLatLngBounds())
+    }
+
+    private fun mapToLatLngBounds(): (DtoTrackInfo) -> TrackInfoResult {
+        return {
+            val box2d = PGbox2d(it.boundaries)
+            val boundaries = arrayOf(arrayOf(box2d.llb.getY(),box2d.llb.getX()),
+                    arrayOf(box2d.urt.getY(),box2d.urt.getX()))
+            TrackInfoResult(it.id, it.name, it.distance, boundaries, it.startTime, it.endTime)
+        }
+    }
+
+    @GET
+    @Path("/{id}/trackpoints")
     fun getTrackPoints(@PathParam("id") id: Long) : List<LatLngTimeEle> {
         return trackPointRepository
                 .findByTrackId(id)
@@ -58,4 +79,11 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
         return geoJson
         //return Response.ok(mapOf(Pair("intersection",geoJson))).build()
     }
+
+    data class TrackInfoResult(val id: Long,
+                               val name: String,
+                               val distance: Long,
+                               val boundaries: Array<Array<Double>>,
+                               val startTime: Date,
+                               val endTime: Date)
 }

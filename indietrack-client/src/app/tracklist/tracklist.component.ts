@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TrackService} from "../track/track.service";
+import {Track} from "../dto/Track";
 
 @Component({
   selector: 'app-tracklist',
@@ -10,7 +11,7 @@ export class TracklistComponent implements OnInit {
 
   constructor(private trackService: TrackService) { }
   tracks: Track[];
-  selectedTrackId;
+  selectedTrack: Track;
 
   ngOnInit() {
     this.trackService.getTracks().subscribe(
@@ -20,7 +21,6 @@ export class TracklistComponent implements OnInit {
   }
 
   onSelect(track: Track) {
-    console.log(track);
-    this.selectedTrackId = track.id;
+    this.selectedTrack = track;
   }
 }
