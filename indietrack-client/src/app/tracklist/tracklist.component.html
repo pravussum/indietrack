@@ -12,9 +12,11 @@
 
         <div id="collapse-{{track.id}}" class="collapse show" data-parent="#tracklistAccordion">
           <div class="card-body">
-            {{track.distance / 1000 | number:"1.1-2"}} km
+            <div><fa-icon icon="arrows-alt-h" class="icon-rpad"></fa-icon>{{track.distance / 1000 | number:"1.1-2"}} km</div>
+            <div><fa-icon icon="stopwatch" class="icon-rpad"></fa-icon>{{getDurationInMin(track) | number: "1.0-0"}} min</div>
           </div>
         </div>
+        <app-heightprofile *ngIf="track == selectedTrack" [track]="track"></app-heightprofile>
       </div>
     </div>
   </div>

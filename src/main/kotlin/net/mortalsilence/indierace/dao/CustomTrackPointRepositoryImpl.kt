@@ -52,8 +52,8 @@ class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal val en
                 min(time) as startTime,
                 max(time) as endTime
             from trackpoint join track on track_id = track.id
-            group by track_id
             $trackIdCondition
+            group by track_id
             order by min(time) desc
             """
 

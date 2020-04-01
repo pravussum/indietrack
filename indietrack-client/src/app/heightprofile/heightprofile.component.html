@@ -1,0 +1,9 @@
+<div class="heightprofilecontainer">
+  <canvas *ngIf="lineChartData.length > 0" baseChart width="10vh" height="5vh"
+          [datasets]="lineChartData"
+          legend="false"
+          chartType="line"
+          [options]="chartOptions"
+          [colors]="lineChartColors">
+  </canvas>
+</div>

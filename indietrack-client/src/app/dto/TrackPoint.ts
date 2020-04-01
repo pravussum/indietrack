@@ -1,4 +1,4 @@
-class TrackPoint {
+export class TrackPoint {
   latitude: number;
   longitude: number;
   elevation: number;

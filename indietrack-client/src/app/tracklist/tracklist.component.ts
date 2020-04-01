@@ -8,7 +8,6 @@ import {Track} from "../dto/Track";
   styleUrls: ['./tracklist.component.css']
 })
 export class TracklistComponent implements OnInit {
-
   constructor(private trackService: TrackService) { }
   tracks: Track[];
   selectedTrack: Track;
@@ -22,5 +21,11 @@ export class TracklistComponent implements OnInit {
 
   onSelect(track: Track) {
     this.selectedTrack = track;
+  }
+
+  getDurationInMin(track: Track): number {
+    if(track) {
+      return (new Date(track.endTime).getTime() - new Date(track.startTime).getTime()) / 60000;
+    } else return undefined;
   }
 }

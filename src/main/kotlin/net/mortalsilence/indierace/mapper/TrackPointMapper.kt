@@ -30,5 +30,8 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
 
     fun mapTrackpoint2LatLong(it: TrackPoint) = LatLngTimeEle(
             latitude = it.location.y,
-            longitude = it.location.x)
+            longitude = it.location.x,
+            elevation = it.location.coordinate.getZ(),
+            time = it.time
+    )
 }

@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {TrackService} from "../track/track.service";
 import {Track} from "../dto/Track";
 import {LatLng, LatLngBounds} from "leaflet";
+import {TrackPoint} from "../dto/TrackPoint";
 
 @Component({
   selector: 'app-trackview',
