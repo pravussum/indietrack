@@ -1,6 +1,3 @@
-/// <reference path="leaflet.hg.d.ts"/>
-/// <reference path="../../../node_modules/@types/d3/index.d.ts" />
-
 import * as L from 'leaflet';
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";

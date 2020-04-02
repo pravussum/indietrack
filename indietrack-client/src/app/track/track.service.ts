@@ -24,4 +24,8 @@ export class TrackService {
     // return this.http.get<TrackPoint[]>("./assets/track.json");
     return this.http.get<TrackPoint[]>("/api/track/" + trackId + "/trackpoints");
   }
+
+  public getSimplifiedTrackPoints(trackId: number): Observable<TrackPoint[]> {
+    return this.http.get<TrackPoint[]>("/api/track/" + trackId + "/trackpoints");
+  }
 }

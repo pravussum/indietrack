@@ -28,4 +28,10 @@ export class TracklistComponent implements OnInit {
       return (new Date(track.endTime).getTime() - new Date(track.startTime).getTime()) / 60000;
     } else return undefined;
   }
+
+  getAvgInKmh(track: Track): number {
+    if(track) {
+      return (track.distance / 1000) / (this.getDurationInMin(track) / 60);
+    } else return undefined;
+  }
 }
