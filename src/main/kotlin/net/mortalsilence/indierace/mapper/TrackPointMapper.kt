@@ -2,7 +2,7 @@ package net.mortalsilence.indierace.mapper
 
 import io.jenetics.jpx.WayPoint
 import net.mortalsilence.indierace.dao.TrackPoint
-import net.mortalsilence.indierace.dto.LatLngTimeEle
+import net.mortalsilence.indierace.dto.DtoTrackPoint
 import org.locationtech.jts.geom.CoordinateXYZM
 import org.locationtech.jts.geom.GeometryFactory
 import java.io.InvalidObjectException
@@ -30,7 +30,7 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
         return TrackPoint(location = point, time = time)
     }
 
-    fun mapTrackpoint2LatLong(it: TrackPoint) = LatLngTimeEle(
+    fun mapTrackpoint2LatLong(it: TrackPoint) = DtoTrackPoint(
             latitude = it.location.y,
             longitude = it.location.x,
             elevation = it.location.coordinate.getZ(),

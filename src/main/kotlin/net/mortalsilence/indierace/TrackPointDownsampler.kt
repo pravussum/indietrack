@@ -1,7 +1,6 @@
 package net.mortalsilence.indierace
 
 import net.mortalsilence.indierace.dao.TrackPoint
-import net.mortalsilence.indierace.dto.LatLngTimeEle
 import net.mortalsilence.indierace.mapper.TrackPointMapper
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject

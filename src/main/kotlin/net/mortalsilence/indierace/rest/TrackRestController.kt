@@ -2,7 +2,7 @@ package net.mortalsilence.indierace.rest
 
 import net.mortalsilence.indierace.dao.TrackPointRepository
 import net.mortalsilence.indierace.dto.DtoTrackInfo
-import net.mortalsilence.indierace.dto.LatLngTimeEle
+import net.mortalsilence.indierace.dto.DtoTrackPoint
 import net.mortalsilence.indierace.dto.MultipartBody
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
 import net.mortalsilence.indierace.mapper.TrackPointMapper
@@ -49,7 +49,7 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/{id}/trackpoints")
-    fun getTrackPoints(@PathParam("id") id: Long) : List<LatLngTimeEle> {
+    fun getTrackPoints(@PathParam("id") id: Long) : List<DtoTrackPoint> {
         return trackPointRepository
                 .findByTrackId(id)
                 .map(trackPointMapper::mapTrackpoint2LatLong)
@@ -57,12 +57,12 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/{id}/trackpoints/simplified")
-    fun getSimplifiedTrackPoints(@PathParam("id") id: Long) : List<LatLngTimeEle> {
+    fun getSimplifiedTrackPoints(@PathParam("id") id: Long) : List<DtoTrackPoint> {
         val wkt = trackPointRepository.getSimplifiedTrackPoints(id)
         val lineString = LineString(wkt)
         val simplifiedPoints = lineString.points
                 .map {
-                    LatLngTimeEle(
+                    DtoTrackPoint(
                             latitude = it.y,
                             longitude = it.x,
                             elevation = it.z,
