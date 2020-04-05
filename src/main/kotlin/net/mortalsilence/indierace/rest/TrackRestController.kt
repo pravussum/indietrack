@@ -1,14 +1,15 @@
 package net.mortalsilence.indierace.rest
 
 import net.mortalsilence.indierace.dao.TrackPointRepository
-import net.mortalsilence.indierace.dao.TrackRepository
 import net.mortalsilence.indierace.dto.DtoTrackInfo
 import net.mortalsilence.indierace.dto.LatLngTimeEle
 import net.mortalsilence.indierace.dto.MultipartBody
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
 import net.mortalsilence.indierace.mapper.TrackPointMapper
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm
+import org.postgis.LineString
 import org.postgis.PGbox2d
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 import javax.transaction.Transactional
@@ -19,7 +20,6 @@ import javax.ws.rs.core.MediaType
 @Produces(MediaType.APPLICATION_JSON)
 class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersistor,
                           @Inject internal val trackPointRepository: TrackPointRepository,
-                          @Inject internal val trackRepository: TrackRepository,
                           @Inject internal val trackPointMapper: TrackPointMapper) {
 
     @GET
@@ -53,6 +53,23 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
         return trackPointRepository
                 .findByTrackId(id)
                 .map(trackPointMapper::mapTrackpoint2LatLong)
+    }
+
+    @GET
+    @Path("/{id}/trackpoints/simplified")
+    fun getSimplifiedTrackPoints(@PathParam("id") id: Long) : List<LatLngTimeEle> {
+        val wkt = trackPointRepository.getSimplifiedTrackPoints(id)
+        val lineString = LineString(wkt)
+        val simplifiedPoints = lineString.points
+                .map {
+                    LatLngTimeEle(
+                            latitude = it.y,
+                            longitude = it.x,
+                            elevation = it.z,
+                            time = Date.from(Instant.ofEpochSecond(it.m.toLong()))
+                    )
+                }
+        return simplifiedPoints
     }
 
     @GET

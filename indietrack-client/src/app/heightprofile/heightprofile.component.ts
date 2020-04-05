@@ -28,7 +28,7 @@ export class HeightprofileComponent implements OnInit {
   private drawHeightProfile() {
     if(!this._track) return;
     let currentTrack = this._track;
-    this.trackService.getTrackPoints(currentTrack.id).subscribe(data => {
+    this.trackService.getSimplifiedTrackPoints(currentTrack.id).subscribe(data => {
       let elevationData = data.map((trackPoint) => {
           return {x: trackPoint.time,
             y: trackPoint.elevation};
@@ -39,7 +39,7 @@ export class HeightprofileComponent implements OnInit {
       this.lineChartData = [{
         data: elevationData,
         label: '',
-        lineTension: 0,
+        lineTension: 0.4,
         pointRadius: 0,
         borderWidth: 0,
         backgroundColor: 'rgba(0,0,0,0.3)'
@@ -56,7 +56,7 @@ export class HeightprofileComponent implements OnInit {
     },
     scales: {
       xAxes: [{
-        type: 'linear',
+        type: 'time',
         display: true,
         scaleLabel: {
           display: true

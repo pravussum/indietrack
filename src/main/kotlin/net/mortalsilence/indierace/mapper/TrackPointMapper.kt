@@ -1,12 +1,14 @@
 package net.mortalsilence.indierace.mapper
 
-import org.locationtech.jts.geom.Coordinate
-import org.locationtech.jts.geom.GeometryFactory
 import io.jenetics.jpx.WayPoint
 import net.mortalsilence.indierace.dao.TrackPoint
 import net.mortalsilence.indierace.dto.LatLngTimeEle
+import org.locationtech.jts.geom.CoordinateXYZM
+import org.locationtech.jts.geom.GeometryFactory
 import java.io.InvalidObjectException
+import java.time.Instant.ofEpochSecond
 import java.time.ZonedDateTime
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
@@ -23,7 +25,7 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
     }
 
     fun mapLatLongEleTimeToTrackPoint(longitude: Double, latitude: Double, elevation: Double, time: ZonedDateTime): TrackPoint {
-        val coordinate = Coordinate(longitude, latitude, elevation)
+        val coordinate = CoordinateXYZM(longitude, latitude, elevation, time.toEpochSecond().toDouble())
         val point = geometryFactory.createPoint(coordinate)
         return TrackPoint(location = point, time = time)
     }
@@ -32,6 +34,6 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
             latitude = it.location.y,
             longitude = it.location.x,
             elevation = it.location.coordinate.getZ(),
-            time = it.time
+            time = Date.from(ofEpochSecond(it.location.coordinate.m.toLong()))
     )
 }

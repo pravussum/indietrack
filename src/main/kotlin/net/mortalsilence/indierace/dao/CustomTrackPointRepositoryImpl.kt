@@ -62,33 +62,24 @@ class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal val en
                 .resultList as List<DtoTrackInfo>
     }
 
-    override fun getSimplifiedTrackInfo(trackId: Long?): List<DtoTrackInfo> {
-        val trackIdCondition = if(trackId != null) "where track.id = $trackId" else ""
+    override fun getSimplifiedTrackPoints(trackId: Long, resolution: Int): String {
         val sql = """
             with line as (
-                select track_id,
-                       min(time) as startTime,
-                       max(time) as endTime,
-                       st_makeline(location order by time) as line,
-                       st_extent(location) as boundaries
+                select
+                    st_makeline(location order by time) as line
                 from trackpoint
-                group by track_id
+                where track_id = $trackId
             )
             select
-                line.track_id as id,
-                track.name as trackName,
-                st_simplifypreservetopology(line.line, st_length(line) / 100),
-                boundaries,
-                line.startTime,
-                endTime
-            from line join track on line.track_id = track.id
-            $trackIdCondition
-            order by starttime desc
+                st_astext(
+                        cast (st_simplify(line.line, st_length(line) / $resolution) as geography)
+                    )
+            from line
             """
 
         @Suppress("UNCHECKED_CAST")
-        return entityManager.createNativeQuery(sql, "TrackInfoMapping")
-                .resultList as List<DtoTrackInfo>
+        return entityManager.createNativeQuery(sql)
+                .singleResult as String
     }
 
 }
