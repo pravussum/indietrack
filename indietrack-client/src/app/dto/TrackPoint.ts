@@ -3,4 +3,5 @@ export class TrackPoint {
   longitude: number;
   elevation: number;
   time: Date;
+  distToSuccessor: number;
 }

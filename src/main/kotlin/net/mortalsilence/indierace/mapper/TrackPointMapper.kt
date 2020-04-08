@@ -5,6 +5,7 @@ import net.mortalsilence.indierace.dao.TrackPoint
 import net.mortalsilence.indierace.dto.DtoTrackPoint
 import org.locationtech.jts.geom.CoordinateXYZM
 import org.locationtech.jts.geom.GeometryFactory
+import org.postgis.Point
 import java.io.InvalidObjectException
 import java.time.Instant.ofEpochSecond
 import java.time.ZonedDateTime
@@ -36,4 +37,13 @@ class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
             elevation = it.location.coordinate.getZ(),
             time = Date.from(ofEpochSecond(it.location.coordinate.m.toLong()))
     )
+
+    fun mapPoint2DtoTrackPoint(it: Point): DtoTrackPoint {
+        return DtoTrackPoint(
+                latitude = it.y,
+                longitude = it.x,
+                elevation = it.z,
+                time = Date.from(ofEpochSecond(it.m.toLong()))
+        )
+    }
 }

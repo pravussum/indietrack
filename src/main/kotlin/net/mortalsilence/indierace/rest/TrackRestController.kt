@@ -9,6 +9,7 @@ import net.mortalsilence.indierace.mapper.TrackPointMapper
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm
 import org.postgis.LineString
 import org.postgis.PGbox2d
+import org.postgis.Point
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
@@ -60,17 +61,16 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
     fun getSimplifiedTrackPoints(@PathParam("id") id: Long) : List<DtoTrackPoint> {
         val wkt = trackPointRepository.getSimplifiedTrackPoints(id)
         val lineString = LineString(wkt)
-        val simplifiedPoints = lineString.points
-                .map {
-                    DtoTrackPoint(
-                            latitude = it.y,
-                            longitude = it.x,
-                            elevation = it.z,
-                            time = Date.from(Instant.ofEpochSecond(it.m.toLong()))
-                    )
-                }
-        return simplifiedPoints
+        return lineString.points.mapIndexed{index, point ->
+            val dtoTrackPoint = trackPointMapper.mapPoint2DtoTrackPoint(point)
+            if(index < lineString.points.size - 1) {
+                dtoTrackPoint.distToSuccessor = point.distance(lineString.points[index + 1])
+            }
+            dtoTrackPoint
+        }
     }
+
+
 
     @GET
     @Path("/{id}/geojson")
