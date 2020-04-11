@@ -85,13 +85,13 @@ export class HeightprofileComponent implements OnInit {
         scaleLabel: {display: true, labelString: 'm'},
         display: true,
         id: 'elevationAxis',
+        position: 'right',
         gridLines: {display: false}
       },{
         scaleLabel: {display: true, labelString: 'km/h'},
         //gridLines: {display: false},
         display: true,
-        id: 'speedAxis',
-        position: 'right'
+        id: 'speedAxis'
       } ]
     }
   }
