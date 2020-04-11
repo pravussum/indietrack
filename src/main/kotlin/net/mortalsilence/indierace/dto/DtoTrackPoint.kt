@@ -7,4 +7,6 @@ data class DtoTrackPoint(val latitude: Double,
                          val elevation: Double? = null,
                          val time: Date? = null,
                          var distToSuccessor: Double? = null,
-                         var avgSpeedToSuccessor: Double? = null)
+                         var durationToSuccessor: Double? = null) {
+    var avgSpeedToSuccessor: Double? = null
+}

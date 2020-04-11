@@ -1,6 +1,7 @@
 package net.mortalsilence.indierace.dao
 
 import net.mortalsilence.indierace.dto.DtoTrackInfo
+import net.mortalsilence.indierace.dto.DtoTrackPoint
 import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -62,24 +63,28 @@ class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal val en
                 .resultList as List<DtoTrackInfo>
     }
 
-    override fun getSimplifiedTrackPoints(trackId: Long, resolution: Int): String {
+    override fun getSimplifiedTrackPoints(trackId: Long, resolution: Int): List<DtoTrackPoint> {
         val sql = """
             with line as (
-                select
-                    st_makeline(location order by time) as line
+                select st_makeline(location order by time) as line
                 from trackpoint
                 where track_id = $trackId
             )
-            select
-                st_astext(
-                        cast (st_simplify(line.line, st_length(line) / $resolution) as geography)
-                    )
-            from line
+            select st_x((dp).geom) as longitude,
+                   st_y((dp).geom) as latitude,
+                   st_z((dp).geom) as elevation,
+                   to_timestamp(st_m((dp).geom)) as time,
+                   st_distance(cast((dp).geom as geography), last_value(cast((dp).geom as geography)) over w) as distToSuccessor,
+                   st_m(last_value((dp).geom) over w) - st_m((dp).geom) as durationToSuccessor                   
+            from (
+                select st_dumppoints(st_simplify(line.line, st_length(line) / $resolution)) as dp from line) as l
+                window w as (order by st_m((dp).geom) rows between 0 preceding and 1 following)
+            order by st_m((dp).geom)
             """
 
         @Suppress("UNCHECKED_CAST")
-        return entityManager.createNativeQuery(sql)
-                .singleResult as String
+        return entityManager.createNativeQuery(sql, "TrackPointMapping")
+                .resultList as List<DtoTrackPoint>
     }
 
 }

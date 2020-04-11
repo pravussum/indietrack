@@ -37,7 +37,7 @@ export class HeightprofileComponent implements OnInit {
 
       let avgSpeedData = data.map((trackPoint) => {
         return {x: trackPoint.time,
-          y: trackPoint.distToSuccessor
+          y: trackPoint.avgSpeedToSuccessor
         }
       });
 
@@ -46,19 +46,21 @@ export class HeightprofileComponent implements OnInit {
       this.lineChartData = [{
         data: elevationData,
         label: '',
-        lineTension: 0.4,
+        lineTension: 0.2,
         pointRadius: 0,
         borderWidth: 0,
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        backgroundColor: 'rgb(100,100,100)',
+        borderColor: 'rgb(100,100,100)',
         yAxisID: 'elevationAxis'
       },{
         data: avgSpeedData,
         label: '',
-        lineTension: 0.4,
+        lineTension: 0.2,
         pointRadius: 0,
         borderWidth: 0,
-        backgroundColor: 'rgba(0,100,0,0.3)',
-        yAxisID: 'speedAxis'
+        borderColor: 'rgba(0,100,0,1.0)',
+        yAxisID: 'speedAxis',
+        fill: false
       }
       ];
     })
@@ -86,7 +88,7 @@ export class HeightprofileComponent implements OnInit {
         gridLines: {display: false}
       },{
         scaleLabel: {display: true, labelString: 'km/h'},
-        gridLines: {display: false},
+        //gridLines: {display: false},
         display: true,
         id: 'speedAxis',
         position: 'right'

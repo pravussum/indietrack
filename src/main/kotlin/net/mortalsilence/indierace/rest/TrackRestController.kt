@@ -7,10 +7,7 @@ import net.mortalsilence.indierace.dto.MultipartBody
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
 import net.mortalsilence.indierace.mapper.TrackPointMapper
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm
-import org.postgis.LineString
 import org.postgis.PGbox2d
-import org.postgis.Point
-import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 import javax.transaction.Transactional
@@ -59,18 +56,14 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
     @GET
     @Path("/{id}/trackpoints/simplified")
     fun getSimplifiedTrackPoints(@PathParam("id") id: Long) : List<DtoTrackPoint> {
-        val wkt = trackPointRepository.getSimplifiedTrackPoints(id)
-        val lineString = LineString(wkt)
-        return lineString.points.mapIndexed{index, point ->
-            val dtoTrackPoint = trackPointMapper.mapPoint2DtoTrackPoint(point)
-            if(index < lineString.points.size - 1) {
-                dtoTrackPoint.distToSuccessor = point.distance(lineString.points[index + 1])
+        val trackPoints = trackPointRepository.getSimplifiedTrackPoints(id)
+        return trackPoints.map {
+            if(it.distToSuccessor ?: 0.0 > 0) {
+                it.avgSpeedToSuccessor = ((it.distToSuccessor ?: 0.0) / 1000.0) / (it.durationToSuccessor!! / 60 / 60)
             }
-            dtoTrackPoint
+            it
         }
     }
-
-
 
     @GET
     @Path("/{id}/geojson")
@@ -90,11 +83,10 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
     }
 
     @GET
-    @Path("/intersection")
-    fun getIntersection() : String {
-        val geoJson = trackPointRepository.getIntersectionAsGeoJson(1, 5900)
-        return geoJson
-        //return Response.ok(mapOf(Pair("intersection",geoJson))).build()
+    @Path("{id}/intersection/{segmentId}")
+    fun getIntersection(@PathParam("id") trackId: Long,
+    @PathParam("segmentId") segmentId: Long) : String {
+        return trackPointRepository.getIntersectionAsGeoJson(segmentId, trackId)
     }
 
     data class TrackInfoResult(val id: Long,

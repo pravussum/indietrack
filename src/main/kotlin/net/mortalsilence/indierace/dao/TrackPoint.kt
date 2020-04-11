@@ -1,6 +1,6 @@
 package net.mortalsilence.indierace.dao
 
-import net.mortalsilence.indierace.dto.DtoTrackInfo
+import net.mortalsilence.indierace.dto.DtoTrackPoint
 import org.locationtech.jts.geom.Point
 import java.time.ZonedDateTime
 import java.util.*
@@ -8,17 +8,17 @@ import javax.persistence.*
 
 @Entity
 @SqlResultSetMapping (
-        name = "TrackInfoMapping",
+        name = "TrackPointMapping",
         classes = [
                 ConstructorResult(
-                        targetClass = DtoTrackInfo::class,
+                        targetClass = DtoTrackPoint::class,
                         columns = [
-                            ColumnResult(name="id", type = Long::class),
-                            ColumnResult(name="trackName", type = String::class),
-                            ColumnResult(name="distance", type = Long::class),
-                            ColumnResult(name="boundaries", type = String::class),
-                            ColumnResult(name="startTime", type = Date::class),
-                            ColumnResult(name="endTime", type = Date::class)
+                            ColumnResult(name="latitude", type = Double::class),
+                            ColumnResult(name="longitude", type = Double::class),
+                            ColumnResult(name="elevation", type = Double::class),
+                            ColumnResult(name="time", type = Date::class),
+                            ColumnResult(name="distToSuccessor", type = Double::class),
+                            ColumnResult(name="durationToSuccessor", type = Double::class)
                         ]
                 )
         ]
