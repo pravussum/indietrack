@@ -25,14 +25,22 @@
                 "input": "./node_modules/leaflet/dist/images",
                 "output": "/"
               },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ionicons",
+                "output": "./assets/ionicons"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/ionicons/dist/svg",
+                "output": "./assets/ionicons/svg"
+              },
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
               "src/styles.css",
-              {
-                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
-              },
+              {"input": "./node_modules/bootstrap/dist/css/bootstrap.css"},
               {"input": "./node_modules/leaflet/dist/leaflet.css"}
             ],
             "scripts": [],

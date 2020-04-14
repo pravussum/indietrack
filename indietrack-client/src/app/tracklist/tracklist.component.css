@@ -9,3 +9,8 @@
 .icon-rpad {
   padding-right: 1vh;
 }
+
+.icon-medium {
+  font-size: 24px;
+  vertical-align: text-bottom;
+}

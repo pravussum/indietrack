@@ -6,13 +6,8 @@ import { AppComponent } from './app.component';
 import { TrackviewComponent } from './trackview/trackview.component';
 import { TracklistComponent } from './tracklist/tracklist.component';
 import {HttpClientModule} from '@angular/common/http';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
 import { HeightprofileComponent } from './heightprofile/heightprofile.component';
 import {ChartsModule} from "ng2-charts";
-import {IonicModule} from "@ionic/angular";
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,16 +19,9 @@ import {IonicModule} from "@ionic/angular";
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        FontAwesomeModule,
-        ChartsModule,
-        IonicModule
+        ChartsModule
     ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor(library: FaIconLibrary) {
-    library.addIconPacks(fas, far)
-  }
-
-}
+export class AppModule { }
