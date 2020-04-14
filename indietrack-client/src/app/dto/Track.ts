@@ -1,4 +1,4 @@
-import {GeoJSON, LatLngBounds} from "leaflet";
+import {LatLngBounds} from "leaflet";
 
 export class Track {
   id: number;
