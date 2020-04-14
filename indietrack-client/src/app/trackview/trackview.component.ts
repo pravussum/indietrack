@@ -1,6 +1,6 @@
 import * as L from 'leaflet';
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {TrackService} from "../track/track.service";
 import {Track} from "../dto/Track";
 import {LatLng, LatLngBounds} from "leaflet";
@@ -14,9 +14,22 @@ import {TrackPoint} from "../dto/TrackPoint";
 export class TrackviewComponent implements OnInit {
   private mymap: L.Map;
   private _track: Track;
+  private _marker: L.Marker;
   private currentTrackPolyline: L.Polyline;
   constructor(private trackService: TrackService,
               private route: ActivatedRoute) { }
+
+  @Input()
+  set marker(latLng: LatLng) {
+    if(this.mymap == undefined) {
+      return;
+    }
+    if(this._marker) {
+      this._marker.setLatLng([latLng.lat, latLng.lng]);
+    } else {
+      this._marker = L.marker([latLng.lat, latLng.lng]).addTo(this.mymap);
+    }
+  }
 
   @Input()
   set track(track: Track) {
@@ -41,11 +54,9 @@ export class TrackviewComponent implements OnInit {
   private getAndDrawTrack() {
     let currentTrack = this._track;
     this.trackService.getTrackPoints(currentTrack.id).subscribe(data => {
-      console.log(data);
       if(this.mymap == undefined) {
         this.initMap(currentTrack.boundaries);
       } else {
-        // this.mymap.setView([data[0].latitude, data[0].longitude], 12)
         this.mymap.flyToBounds(currentTrack.boundaries)
       }
       this.drawTrack(data, 'blue');

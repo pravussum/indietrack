@@ -28,8 +28,7 @@
               {
                 "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
               },
-              {"input": "./node_modules/leaflet/dist/leaflet.css"},
-              {"input": "./node_modules/leaflet.heightgraph/dist/L.Control.Heightgraph.min.css"}
+              {"input": "./node_modules/leaflet/dist/leaflet.css"}
             ],
             "scripts": [],
             "es5BrowserSupport": true

@@ -17,11 +17,13 @@
             <div><fa-icon icon="tachometer-alt" class="icon-rpad"></fa-icon>{{getAvgInKmh(track) | number: "1.0-1"}} km/h</div>
           </div>
         </div>
-        <app-heightprofile *ngIf="track == selectedTrack" [track]="track"></app-heightprofile>
+        <app-heightprofile *ngIf="track == selectedTrack" [track]="track"
+        (trackPointSelected)="onTrackPointSelectedInHeightGraph($event)"
+        ></app-heightprofile>
       </div>
     </div>
   </div>
   <div class="trackview-container d-flex flex-column flex-grow-1">
-    <app-trackview [track]="selectedTrack" class="flex-grow-1 h-100"></app-trackview>
+    <app-trackview [track]="selectedTrack" [marker]="trackPosToMark" class="flex-grow-1 h-100"></app-trackview>
   </div>
 </div>

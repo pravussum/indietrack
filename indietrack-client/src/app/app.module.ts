@@ -11,6 +11,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { HeightprofileComponent } from './heightprofile/heightprofile.component';
 import {ChartsModule} from "ng2-charts";
+import {IonicModule} from "@ionic/angular";
 
 @NgModule({
   declarations: [
@@ -19,13 +20,14 @@ import {ChartsModule} from "ng2-charts";
     TracklistComponent,
     HeightprofileComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FontAwesomeModule,
-    ChartsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FontAwesomeModule,
+        ChartsModule,
+        IonicModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

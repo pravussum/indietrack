@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TrackService} from "../track/track.service";
 import {Track} from "../dto/Track";
+import {TrackPoint} from "../dto/TrackPoint";
+import {LatLng} from "leaflet";
 
 @Component({
   selector: 'app-tracklist',
@@ -8,9 +10,14 @@ import {Track} from "../dto/Track";
   styleUrls: ['./tracklist.component.css']
 })
 export class TracklistComponent implements OnInit {
+
   constructor(private trackService: TrackService) { }
+
+  trackPosToMark: LatLng;
+
   tracks: Track[];
   selectedTrack: Track;
+  selectedTrackPoint: TrackPoint;
 
   ngOnInit() {
     this.trackService.getTracks().subscribe(
@@ -33,5 +40,10 @@ export class TracklistComponent implements OnInit {
     if(track) {
       return (track.distance / 1000) / (this.getDurationInMin(track) / 60);
     } else return undefined;
+  }
+
+  onTrackPointSelectedInHeightGraph(trackPoint: TrackPoint) {
+    this.selectedTrackPoint = trackPoint;
+    this.trackPosToMark = new LatLng(trackPoint.latitude, trackPoint.longitude, trackPoint.elevation);
   }
 }

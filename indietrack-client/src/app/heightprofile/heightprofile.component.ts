@@ -1,19 +1,25 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Track} from "../dto/Track";
 import {ChartDataSets, ChartOptions} from "chart.js";
 import {TrackService} from "../track/track.service";
 import {Color} from "ng2-charts";
+import {PluginServiceGlobalRegistrationAndOptions} from "ng2-charts/lib/base-chart.directive";
+import * as pluginCrosshair from 'chartjs-plugin-crosshair'
+import {TrackPoint} from "../dto/TrackPoint";
 
 @Component({
   selector: 'app-heightprofile',
   templateUrl: './heightprofile.component.html',
   styleUrls: ['./heightprofile.component.css']
 })
+
 export class HeightprofileComponent implements OnInit {
 
   private _track: Track;
 
   constructor(private trackService: TrackService) {  }
+
+  @Output() trackPointSelected = new EventEmitter<TrackPoint>();
 
   @Input()
   set track(track: Track) {
@@ -29,9 +35,12 @@ export class HeightprofileComponent implements OnInit {
     if(!this._track) return;
     let currentTrack = this._track;
     this.trackService.getSimplifiedTrackPoints(currentTrack.id).subscribe(data => {
+      this.trackPoints = data;
       let elevationData = data.map((trackPoint) => {
           return {x: trackPoint.time,
-            y: trackPoint.elevation};
+            y: trackPoint.elevation,
+            trackPoint: trackPoint
+          };
         }
       );
 
@@ -41,8 +50,6 @@ export class HeightprofileComponent implements OnInit {
         }
       });
 
-
-      console.log(elevationData);
       this.lineChartData = [{
         data: elevationData,
         label: '',
@@ -67,7 +74,15 @@ export class HeightprofileComponent implements OnInit {
 
   }
 
+  onHover = (event: MouseEvent, activeElements: Array<any>) : any => {
+    if (activeElements.length > 0) {
+      this.trackPointSelected.emit(this.trackPoints[activeElements[0]._index]);
+    }
+  }
+
   public lineChartData: ChartDataSets[] = [ ];
+  private trackPoints: TrackPoint[] = [];
+
   public chartOptions: ChartOptions = {
     responsive: true,
     legend: {
@@ -93,8 +108,25 @@ export class HeightprofileComponent implements OnInit {
         display: true,
         id: 'speedAxis'
       } ]
-    }
+    },
+    plugins: {
+      crosshair: {
+        line: {
+          color: '#F66',        // crosshair line color
+          width: 1,             // crosshair line width
+          dashPattern: [5, 5]   // crosshair line dash pattern
+        }
+      }
+    },
+    hover: {
+      mode: "x",
+      intersect: false
+    },
+    onHover : this.onHover,
+    events: ['mousemove']
   }
+
+  public chartPlugins: PluginServiceGlobalRegistrationAndOptions[] = [pluginCrosshair];
 
   public lineChartColors: Color[] = [
     {
@@ -104,5 +136,6 @@ export class HeightprofileComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+
   }
 }
