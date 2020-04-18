@@ -14,3 +14,18 @@
   font-size: 24px;
   vertical-align: text-bottom;
 }
+
+.icon-large {
+  font-size: 32px;
+  vertical-align: bottom;
+}
+
+.card-header ion-icon, .card-header small {
+  color: gray;
+}
+
+.card-body {
+  padding-bottom: 10vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+}

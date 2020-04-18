@@ -1,4 +1,6 @@
+/// <reference path="../../typings/leaflet-linestring-select.d.ts" />
 import * as L from 'leaflet';
+import 'leaflet-linestring-select'
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {TrackService} from "../track/track.service";
@@ -16,6 +18,7 @@ export class TrackviewComponent implements OnInit {
   private _track: Track;
   private _marker: L.Marker;
   private currentTrackPolyline: L.Polyline;
+  private selectControl: L.Control.LineStringSelect;
   constructor(private trackService: TrackService,
               private route: ActivatedRoute) { }
 
@@ -41,6 +44,28 @@ export class TrackviewComponent implements OnInit {
 
   get track(): Track {
     return this._track;
+  }
+
+  getSelection(): L.LatLng[] {
+    if(!this.selectControl) {
+      return [];
+    }
+    return this.selectControl.getSelection();
+  }
+
+  @Input()
+  set selectionMode(selectionMode: boolean) {
+    if(selectionMode) {
+      if(!this.track) return; // now track available
+      if(this.selectControl) return; // already enabled
+      this.selectControl = new L.Control.LineStringSelect({startMarkerClass: "select-marker select-start-marker"})
+      this.mymap.addControl(this.selectControl);
+      this.selectControl.enable({layer: this.currentTrackPolyline})
+    } else {
+      if(!this.selectControl) return; // already disabled
+      this.mymap.removeControl(this.selectControl)
+      this.selectControl = undefined;
+    }
   }
 
   ngOnInit() {

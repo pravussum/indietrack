@@ -43,7 +43,10 @@
               {"input": "./node_modules/bootstrap/dist/css/bootstrap.css"},
               {"input": "./node_modules/leaflet/dist/leaflet.css"}
             ],
-            "scripts": [],
+            "scripts": [
+              {"input":  "./node_modules/jquery/dist/jquery.js"},
+              {"input":  "./node_modules/bootstrap/dist/js/bootstrap.js"}
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {
