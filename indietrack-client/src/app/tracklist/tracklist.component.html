@@ -19,7 +19,7 @@
             <app-heightprofile *ngIf="track == selectedTrack" [track]="track" (trackPointSelected)="onTrackPointSelectedInHeightGraph($event)"></app-heightprofile>
             <button *ngIf="selectedTrack && !segCreationMode" class="btn btn-outline-secondary" type="button" (click)="onCreateSegment()">Create segment</button>
             <div *ngIf="segCreationMode">
-              <input  class="form-control" type="text" placeholder="Segment name">
+              <input  [(ngModel)]="segmentName" class="form-control" type="text" placeholder="Segment name">
               <button *ngIf="segCreationMode" class="btn btn-primary btn-block" type="button" (click)="saveSegment()">Save</button>
             </div>
           </div>

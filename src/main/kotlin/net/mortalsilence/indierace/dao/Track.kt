@@ -6,7 +6,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table (
+@Table (name = "track",
         uniqueConstraints = [UniqueConstraint(columnNames = ["name"])]
 )
 @SqlResultSetMapping (

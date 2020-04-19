@@ -7,6 +7,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
+@Table(name = "trackpoint")
 @SqlResultSetMapping (
         name = "TrackPointMapping",
         classes = [

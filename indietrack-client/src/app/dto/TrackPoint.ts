@@ -1,4 +1,4 @@
-export class TrackPoint {
+export interface TrackPoint {
   latitude: number;
   longitude: number;
   elevation: number;

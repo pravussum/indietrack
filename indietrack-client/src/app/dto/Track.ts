@@ -1,6 +1,6 @@
 import {LatLngBounds} from "leaflet";
 
-export class Track {
+export interface Track {
   id: number;
   name: string;
   startTime: Date;

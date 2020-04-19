@@ -4,6 +4,7 @@ import {Track} from "../dto/Track";
 import {TrackPoint} from "../dto/TrackPoint";
 import {LatLng} from "leaflet";
 import {TrackviewComponent} from "../trackview/trackview.component";
+import {SegmentService} from "../segment/segment.service";
 
 @Component({
   selector: 'app-tracklist',
@@ -14,7 +15,8 @@ export class TracklistComponent implements OnInit {
 
   @ViewChild(TrackviewComponent) trackView;
 
-  constructor(private trackService: TrackService) { }
+  constructor(private trackService: TrackService,
+              private segmentService: SegmentService) { }
 
   trackPosToMark: LatLng;
 
@@ -22,6 +24,7 @@ export class TracklistComponent implements OnInit {
   selectedTrack: Track;
   selectedTrackPoint: TrackPoint;
   segCreationMode: boolean;
+  segmentName: string;
 
   ngOnInit() {
     this.trackService.getTracks().subscribe(
@@ -78,5 +81,13 @@ export class TracklistComponent implements OnInit {
 
   saveSegment() {
     console.log(JSON.stringify(this.trackView.getSelection()));
+    let latLongs = this.trackView.getSelection().map(p => { return {latitude: p.lat, longitude: p.lng}});
+    this.segmentService.createSegment({name: this.segmentName, points: latLongs})
+      .subscribe(id => {
+        console.log(id);
+        this.segmentName = undefined;
+        this.segCreationMode = false;
+      },
+        err => console.log(err));
   }
 }
