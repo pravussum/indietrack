@@ -5,6 +5,7 @@ import {TrackPoint} from "../dto/TrackPoint";
 import {LatLng} from "leaflet";
 import {TrackviewComponent} from "../trackview/trackview.component";
 import {SegmentService} from "../segment/segment.service";
+import {Attempt} from "../dto/Attempt";
 
 @Component({
   selector: 'app-tracklist',
@@ -25,6 +26,7 @@ export class TracklistComponent implements OnInit {
   selectedTrackPoint: TrackPoint;
   segCreationMode: boolean;
   segmentName: string;
+  segmentAttempts: Attempt[];
 
   ngOnInit() {
     this.trackService.getTracks().subscribe(

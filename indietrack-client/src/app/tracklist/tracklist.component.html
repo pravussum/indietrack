@@ -16,12 +16,15 @@
             <div><ion-icon name="analytics-outline"  class="icon-medium icon-rpad"></ion-icon>{{track.distance / 1000 | number:"1.1-2"}} km</div>
             <div><ion-icon name="stopwatch-outline"  class="icon-medium icon-rpad"></ion-icon>{{getDurationInMin(track) | number: "1.0-0"}} min</div>
             <div><ion-icon name="speedometer-outline"  class="icon-medium icon-rpad"></ion-icon>{{getAvgInKmh(track) | number: "1.0-1"}} km/h</div>
+
             <app-heightprofile *ngIf="track == selectedTrack" [track]="track" (trackPointSelected)="onTrackPointSelectedInHeightGraph($event)"></app-heightprofile>
+
             <button *ngIf="selectedTrack && !segCreationMode" class="btn btn-outline-secondary" type="button" (click)="onCreateSegment()">Create segment</button>
             <div *ngIf="segCreationMode">
               <input  [(ngModel)]="segmentName" class="form-control" type="text" placeholder="Segment name">
               <button *ngIf="segCreationMode" class="btn btn-primary btn-block" type="button" (click)="saveSegment()">Save</button>
             </div>
+            <app-track-segment-details *ngIf="track == selectedTrack" trackId="{{track.id}}"></app-track-segment-details>
           </div>
         </div>
       </div>

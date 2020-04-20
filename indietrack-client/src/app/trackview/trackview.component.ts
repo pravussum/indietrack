@@ -5,8 +5,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {TrackService} from "../track/track.service";
 import {Track} from "../dto/Track";
-import {LatLng, LatLngBounds} from "leaflet";
+import {GeoJSON, LatLng, LatLngBounds} from "leaflet";
 import {TrackPoint} from "../dto/TrackPoint";
+import {SegmentService} from "../segment/segment.service";
 
 @Component({
   selector: 'app-trackview',
@@ -19,7 +20,9 @@ export class TrackviewComponent implements OnInit {
   private _marker: L.Marker;
   private currentTrackPolyline: L.Polyline;
   private selectControl: L.Control.LineStringSelect;
+  private segments: GeoJSON[];
   constructor(private trackService: TrackService,
+              private segmentService: SegmentService,
               private route: ActivatedRoute) { }
 
   @Input()
@@ -84,6 +87,7 @@ export class TrackviewComponent implements OnInit {
       } else {
         this.mymap.flyToBounds(currentTrack.boundaries)
       }
+      this.loadSegments(currentTrack.boundaries);
       this.drawTrack(data, 'blue');
     })
   }
@@ -113,4 +117,29 @@ export class TrackviewComponent implements OnInit {
     return L.latLng(row.latitude, row.longitude)
   }
 
+  private loadSegments(boundaries: LatLngBounds) {
+    this.removeOldSegments();
+    this.segmentService.getSegmentsInBoundingBox(
+      {latitude: boundaries[0][0], longitude: boundaries[0][1]},
+      {latitude: boundaries[1][0], longitude: boundaries[1][1]}
+    ).subscribe(data => {
+      this.segments = data.map( d => {
+        return L.geoJSON(d.geoJson,{
+          style: function (feature) {
+            return {color: 'red'};
+          }
+        })});
+      for(let s of this.segments) {
+        s.addTo(this.mymap).bringToFront();
+      }
+    });
+  }
+
+  private removeOldSegments() {
+    if(this.segments) {
+      for(let s of this.segments) {
+        s.removeFrom(this.mymap);
+      }
+    }
+  }
 }
