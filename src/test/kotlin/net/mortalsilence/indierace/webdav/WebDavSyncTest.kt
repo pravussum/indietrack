@@ -3,8 +3,8 @@ package net.mortalsilence.indierace.webdav
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import net.mortalsilence.indierace.dao.Track
-import net.mortalsilence.indierace.dao.TrackRepository
+import net.mortalsilence.indierace.persistence.entities.Track
+import net.mortalsilence.indierace.persistence.repositories.track.TrackRepository
 import net.mortalsilence.indierace.dto.Credentials
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
 import org.junit.jupiter.api.BeforeEach

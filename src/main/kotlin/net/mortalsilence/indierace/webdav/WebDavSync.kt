@@ -1,15 +1,13 @@
 package net.mortalsilence.indierace.webdav
 
 import com.github.sardine.SardineFactory
-import net.mortalsilence.indierace.dao.TrackRepository
+import net.mortalsilence.indierace.persistence.repositories.track.TrackRepository
 import net.mortalsilence.indierace.dto.Credentials
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
 import org.slf4j.LoggerFactory
-import java.io.InvalidObjectException
 import java.net.URL
 import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
-import javax.transaction.Transactional
 
 
 @Suppress("unused")

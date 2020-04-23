@@ -1,4 +1,4 @@
-package net.mortalsilence.indierace.dao
+package net.mortalsilence.indierace.persistence.repositories.trackpoint
 
 import net.mortalsilence.indierace.dto.DtoTrackInfo
 import net.mortalsilence.indierace.dto.DtoTrackPoint

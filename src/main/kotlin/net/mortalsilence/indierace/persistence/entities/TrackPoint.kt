@@ -1,6 +1,7 @@
-package net.mortalsilence.indierace.dao
+package net.mortalsilence.indierace.persistence.entities
 
 import net.mortalsilence.indierace.dto.DtoTrackPoint
+import net.mortalsilence.indierace.persistence.entities.Track
 import org.locationtech.jts.geom.Point
 import java.time.ZonedDateTime
 import java.util.*

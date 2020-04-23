@@ -1,4 +1,4 @@
-package net.mortalsilence.indierace.dao
+package net.mortalsilence.indierace.persistence.repositories.track
 
 import javax.inject.Inject
 import javax.persistence.EntityManager

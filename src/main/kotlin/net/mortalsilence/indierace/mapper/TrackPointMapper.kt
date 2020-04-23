@@ -1,7 +1,7 @@
 package net.mortalsilence.indierace.mapper
 
 import io.jenetics.jpx.WayPoint
-import net.mortalsilence.indierace.dao.TrackPoint
+import net.mortalsilence.indierace.persistence.entities.TrackPoint
 import net.mortalsilence.indierace.dto.DtoTrackPoint
 import org.locationtech.jts.geom.CoordinateXYZM
 import org.locationtech.jts.geom.GeometryFactory

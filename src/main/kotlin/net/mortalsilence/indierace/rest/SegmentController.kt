@@ -1,8 +1,8 @@
 package net.mortalsilence.indierace.rest
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import net.mortalsilence.indierace.dao.Segment
-import net.mortalsilence.indierace.dao.SegmentRepository
+import net.mortalsilence.indierace.persistence.entities.Segment
+import net.mortalsilence.indierace.persistence.repositories.segment.SegmentRepository
 import net.mortalsilence.indierace.dto.DtoAttempt
 import net.mortalsilence.indierace.dto.DtoLatLng
 import net.mortalsilence.indierace.dto.DtoSegment

@@ -1,4 +1,4 @@
-package net.mortalsilence.indierace.dao
+package net.mortalsilence.indierace.persistence.entities
 
 import net.mortalsilence.indierace.dto.DtoTrackInfo
 import java.time.ZonedDateTime

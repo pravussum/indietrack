@@ -1,4 +1,4 @@
-package net.mortalsilence.indierace.dao
+package net.mortalsilence.indierace.persistence.repositories.segment
 
 import net.mortalsilence.indierace.dto.DtoAttempt
 import net.mortalsilence.indierace.dto.DtoLatLng

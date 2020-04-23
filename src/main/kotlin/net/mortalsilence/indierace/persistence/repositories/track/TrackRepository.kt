@@ -1,5 +1,6 @@
-package net.mortalsilence.indierace.dao
+package net.mortalsilence.indierace.persistence.repositories.track
 
+import net.mortalsilence.indierace.persistence.entities.Track
 import org.springframework.data.repository.CrudRepository
 import java.util.*
 

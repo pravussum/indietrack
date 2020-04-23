@@ -1,8 +1,8 @@
 package net.mortalsilence.indierace.rest
 
-import net.mortalsilence.indierace.dao.Track
-import net.mortalsilence.indierace.dao.TrackPointRepository
-import net.mortalsilence.indierace.dao.TrackRepository
+import net.mortalsilence.indierace.persistence.entities.Track
+import net.mortalsilence.indierace.persistence.repositories.trackpoint.TrackPointRepository
+import net.mortalsilence.indierace.persistence.repositories.track.TrackRepository
 import net.mortalsilence.indierace.mapper.TrackPointMapper
 import java.time.ZonedDateTime
 import java.util.*
@@ -15,8 +15,8 @@ import javax.ws.rs.core.MediaType
 @Produces(MediaType.APPLICATION_JSON)
 class
 TrackPointRestController (@Inject internal val trackRepository: TrackRepository,
-                                @Inject internal val trackPointRepository: TrackPointRepository,
-                                @Inject internal val trackPointMapper: TrackPointMapper) {
+                          @Inject internal val trackPointRepository: TrackPointRepository,
+                          @Inject internal val trackPointMapper: TrackPointMapper) {
 
     @POST
     @Path("/add")

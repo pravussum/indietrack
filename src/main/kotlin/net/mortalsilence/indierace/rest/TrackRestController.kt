@@ -1,6 +1,6 @@
 package net.mortalsilence.indierace.rest
 
-import net.mortalsilence.indierace.dao.TrackPointRepository
+import net.mortalsilence.indierace.persistence.repositories.trackpoint.TrackPointRepository
 import net.mortalsilence.indierace.dto.DtoTrackInfo
 import net.mortalsilence.indierace.dto.DtoTrackPoint
 import net.mortalsilence.indierace.dto.MultipartBody
