@@ -4,6 +4,7 @@ import com.github.sardine.SardineFactory
 import net.mortalsilence.indierace.persistence.repositories.track.TrackRepository
 import net.mortalsilence.indierace.dto.Credentials
 import net.mortalsilence.indierace.gpx.GpxTrackPersistor
+import net.mortalsilence.indierace.persistence.repositories.trackpoint.TrackPointRepository
 import org.slf4j.LoggerFactory
 import java.net.URL
 import javax.enterprise.context.ApplicationScoped
@@ -14,8 +15,9 @@ import javax.inject.Inject
 @ApplicationScoped
 open class WebDavSync (
 
-        @Inject internal val gpxTrackPersistor: GpxTrackPersistor,
-        @Inject internal val trackRepository: TrackRepository
+        @Inject internal var gpxTrackPersistor: GpxTrackPersistor,
+        @Inject internal var trackRepository: TrackRepository,
+        @Inject internal var trackPointRepository: TrackPointRepository
 ){
 
     var LOGGER = LoggerFactory.getLogger(WebDavSync::class.java)
@@ -23,13 +25,17 @@ open class WebDavSync (
     fun syncWebDavDir(credentials: Credentials, webdavUrl: String) {
 
         val baseUrl = URL(webdavUrl)
-        val existingEtags = trackRepository.getExternalIds()
+//        val existingEtagsWithName = trackRepository.getExternalIds()
+        val existingNames = trackRepository.getNames()
+
+        // TODO compare etags for already existing name and intelligently update the existing track
 
         getWebDavFilesRecursive(credentials, webdavUrl) {
-            it.path.endsWith(".gpx") && !existingEtags.contains(it.etag)
+            it.path.endsWith(".gpx") && !existingNames.contains(getFilenameOnly(it.path)) // TODO handly filename duplicates in different directories
         }.forEach { davResource ->
             val url = URL(baseUrl, davResource.href.toString()).toExternalForm()
             LOGGER.debug("Downloading $url ...")
+            // TODO reuse connection
             val sardine = SardineFactory.begin(credentials.username, credentials.password)
             try {
                 val gpxStream = sardine.get(url)

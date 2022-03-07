@@ -11,18 +11,17 @@ import javax.inject.Inject
 import javax.transaction.Transactional
 
 @ApplicationScoped
-class GpxTrackPersistor(@Inject internal val trackPointRepository: TrackPointRepository,
-                        @Inject internal val trackRepository: TrackRepository,
-                        @Inject internal val gpxReader: GpxReader,
-                        @Inject internal val trackPointMapper: TrackPointMapper) {
+class GpxTrackPersistor(@Inject internal var trackPointRepository: TrackPointRepository,
+                        @Inject internal var trackRepository: TrackRepository,
+                        @Inject internal var gpxReader: GpxReader,
+                        @Inject internal var trackPointMapper: TrackPointMapper) {
 
     @Transactional
     fun persistGpxTrack(inputStream: InputStream,
                         trackName: String? = null,
                         externalId: String? = null): Track {
         val trackPoints = gpxReader.readGpx(inputStream, trackPointMapper::mapWayPoint2TrackPoint)
-        val track = Track(name = trackName
-                ?: UUID.randomUUID().toString(), externalId = externalId)
+        val track = Track(name = trackName ?: UUID.randomUUID().toString(), externalId = externalId)
         trackPoints.peek{
                     if(track.id == null) {
                         track.startTime = it.time

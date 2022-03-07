@@ -1,5 +1,6 @@
 package net.mortalsilence.indierace.rest
 
+import net.mortalsilence.indierace.dto.DtoTrackPoint
 import net.mortalsilence.indierace.persistence.entities.Track
 import net.mortalsilence.indierace.persistence.repositories.trackpoint.TrackPointRepository
 import net.mortalsilence.indierace.persistence.repositories.track.TrackRepository
@@ -14,10 +15,17 @@ import javax.ws.rs.core.MediaType
 @Path("/trackpoints")
 @Produces(MediaType.APPLICATION_JSON)
 class
-TrackPointRestController (@Inject internal val trackRepository: TrackRepository,
-                          @Inject internal val trackPointRepository: TrackPointRepository,
-                          @Inject internal val trackPointMapper: TrackPointMapper) {
+TrackPointRestController (@Inject internal var trackRepository: TrackRepository,
+                          @Inject internal var trackPointRepository: TrackPointRepository,
+                          @Inject internal var trackPointMapper: TrackPointMapper) {
 
+    @GET
+    @Path("/")
+    fun getTrackPoints() : List<DtoTrackPoint> {
+        return trackPointRepository
+            .findAll()
+            .map(trackPointMapper::mapTrackpoint2LatLong)
+    }
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -14,7 +14,7 @@ import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
 @ApplicationScoped
-class TrackPointMapper(@Inject internal val geometryFactory: GeometryFactory) {
+class TrackPointMapper(@Inject internal var geometryFactory: GeometryFactory) {
 
     fun mapWayPoint2TrackPoint(wayPoint: WayPoint) : TrackPoint {
         val longitude = wayPoint.longitude.toDouble()

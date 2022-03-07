@@ -16,9 +16,9 @@ import javax.ws.rs.core.MediaType
 
 @Path("/track")
 @Produces(MediaType.APPLICATION_JSON)
-class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersistor,
-                          @Inject internal val trackPointRepository: TrackPointRepository,
-                          @Inject internal val trackPointMapper: TrackPointMapper) {
+class TrackRestController(@Inject internal var gpxTrackPersistor: GpxTrackPersistor,
+                          @Inject internal var trackPointRepository: TrackPointRepository,
+                          @Inject internal var trackPointMapper: TrackPointMapper) {
 
     @GET
     @Path("/")
@@ -30,10 +30,11 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
 
     @GET
     @Path("/{id}")
-    fun getTrack(@PathParam("id") id: Long): List<TrackInfoResult> {
+    fun getTrack(@PathParam("id") id: Long): TrackInfoResult {
         return trackPointRepository
-                .getTrackInfo(id)
-                .map(mapToLatLngBounds())
+            .getTrackInfo(id)
+            .map(mapToLatLngBounds())
+            .first()
     }
 
     private fun mapToLatLngBounds(): (DtoTrackInfo) -> TrackInfoResult {
@@ -49,7 +50,7 @@ class TrackRestController(@Inject internal val gpxTrackPersistor: GpxTrackPersis
     @Path("/{id}/trackpoints")
     fun getTrackPoints(@PathParam("id") id: Long) : List<DtoTrackPoint> {
         return trackPointRepository
-                .findByTrackId(id)
+                .findByTrackIdOrderByTime(id)
                 .map(trackPointMapper::mapTrackpoint2LatLong)
     }
 

@@ -13,7 +13,7 @@ class WebDavSyncScheduler(
         @ConfigProperty(name = "sync.webdav.url") internal val syncBaseUrl: String?,
         @ConfigProperty(name = "sync.webdav.user") internal val syncUserName: String?,
         @ConfigProperty(name = "sync.webdav.password") internal val syncPassword: String?,
-        @Inject internal val webDavSync: WebDavSync
+        @Inject internal var webDavSync: WebDavSync
 ) {
     var LOGGER = LoggerFactory.getLogger(WebDavSyncScheduler::class.java)
 

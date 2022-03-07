@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
-class CustomSegmentRepositoryImpl(@Inject @PersistenceContext internal val entityManager: EntityManager): CustomSegmentRepository {
+class CustomSegmentRepositoryImpl(@Inject @PersistenceContext internal var entityManager: EntityManager): CustomSegmentRepository {
     override fun getAttemptsForTrack(trackId: Long): List<DtoAttempt> {
         val sql = """
             with attempt as (select seg_id, track_id, (st_makeline(tp.location order by tp.time)) as points

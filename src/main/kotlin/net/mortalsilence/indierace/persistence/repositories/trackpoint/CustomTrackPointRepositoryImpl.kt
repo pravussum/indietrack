@@ -7,7 +7,7 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @Suppress("", "unused")
-class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal val entityManager: EntityManager): CustomTrackPointRepository {
+class CustomTrackPointRepositoryImpl(@Inject @PersistenceContext internal var entityManager: EntityManager): CustomTrackPointRepository {
     override fun getIntersectionAsGeoJson(segmentTrackId: Long, trackId: Long) : String {
 
         val sql = """

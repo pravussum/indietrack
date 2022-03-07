@@ -7,7 +7,7 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 @ApplicationScoped
-class TrackPointDownsampler(@Inject internal val trackPointMapper: TrackPointMapper) {
+class TrackPointDownsampler(@Inject internal var trackPointMapper: TrackPointMapper) {
 
      fun <T> downSampleWithTargetSize(input : List<TrackPoint>, bucketCount: Int, aggFunc : (List<TrackPoint>) -> T): List<T> {
          val bucketSize = ceil(input.size.toDouble() / bucketCount.toDouble()).toInt()

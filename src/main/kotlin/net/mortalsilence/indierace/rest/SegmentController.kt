@@ -15,8 +15,8 @@ import javax.ws.rs.core.MediaType
 
 @Path("/segment")
 @Produces(MediaType.APPLICATION_JSON)
-class SegmentController(@Inject internal val segmentRepository: SegmentRepository,
-                        @Inject internal val latLng2LineStringMapper: LatLng2LineStringMapper) {
+class SegmentController(@Inject internal var segmentRepository: SegmentRepository,
+                        @Inject internal var latLng2LineStringMapper: LatLng2LineStringMapper) {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

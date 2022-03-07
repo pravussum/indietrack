@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped
 import javax.inject.Inject
 
 @ApplicationScoped
-class LatLng2LineStringMapper(@Inject internal val geometryFactory: GeometryFactory) {
+class LatLng2LineStringMapper(@Inject internal var geometryFactory: GeometryFactory) {
 
     fun mapLatLng2LineString(latLngPoints: List<DtoLatLng>) : LineString {
         val coordinates: Array<Coordinate> = latLngPoints
